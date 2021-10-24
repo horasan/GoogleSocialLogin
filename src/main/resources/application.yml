@@ -1,0 +1,51 @@
+
+logging:
+  level:
+    org.zalando.logbook: TRACE
+    
+  pattern:
+    console: "%d %-5level %logger : %msg%n"
+    file: "%d %-5level [%thread] %logger : %msg%n"
+
+customlog-note: true
+customlog-frontend: true
+customlog-oauth2: true
+customlog-googlestep: true
+customlog-logFileFolder: src/main/resources/
+customlog-logFileName: oauth2RelatedLogs.txt
+clientagent-frontend-home: https://localhost:4200
+
+# must be consistant with Client Application registration.
+# Ref: https://console.cloud.google.com/apis/credentials/oauthclient
+# Authorized redirect URI --> https://localhost:8080/googleSocialWebClient/login/oauth2/code/google  
+server:
+  port: 8080
+  servlet:
+    context-path: /googleSocialWebClient 
+    session:
+      cookie:
+        path: /googleSocialWebClient 
+  
+  # Oauth2 implementations depend on ssl
+  # Ref: https://docs.oracle.com/cd/E19509-01/820-3503/ggfhb/index.html
+  # keystore file location is src\main\resources\keystore.p12  
+  ssl:
+    key-store-password: somepass
+    key-store: classpath:keystore.p12
+    key-store-type: PKCS12
+    key-alias: somealias
+
+# Spring Security Oauth2 definitions.
+# Client secret is kept as plain-text, ok for development!
+# Ref: https://spring.io/guides/tutorials/spring-boot-oauth2/  Section: Configure application.yml
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 169035187152-o0usnrcdadlthg7upnhcbg54hja3hfm4.apps.googleusercontent.com 
+            client-secret: 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
+            scope: profile,email
+            client-name: googleSocialWebClient
+
